@@ -3,4 +3,4 @@
 - 🌱 I’m currently learning Python, JavaScript.
 - 💞️ I’m looking to collaborate on Website Designs.
 - 📫 How to reach me 'https://bulamabenjamin.website'.
-- ⚡ Fun fact: The Multiverse is real and I am a Prime.
+- ⚡ Fun fact: Time controls EVERYTHING.
