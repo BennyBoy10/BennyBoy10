@@ -1,6 +1,6 @@
 - 👋 Hi, I’m BennyBoy.
 - 👀 I’m interested in Science and Techonlogy.
 - 🌱 I’m currently learning Python, JavaScript.
-- 💞️ I’m looking to collaborate on Website Designs, AI.
+- 💞️ I’m looking to collaborate on Website Designs, AI Development.
 - 📫 How to reach me 'https://bulamabenjamin.website'.
 - ⚡ Fun fact: AI is the Future.
