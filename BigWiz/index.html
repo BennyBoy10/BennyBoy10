@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Downloads — Benny</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="../Images/Benny.png">
+
+  <style>
+    /* ── DESIGN TOKENS ─────────────────────────────────────────── */
+    :root {
+      --bg:    #0d0d0f;
+      --surface:     #141417;
+      --card:  #1a1a1f;
+      --border:      #2a2a32;
+      --border-glow: #f97316;
+      --text:  #e8e8ec;
+      --text-muted:  #7a7a8a;
+      --text-dim:    #4a4a58;
+      --accent:      #f97316;
+      --accent-2:    #fb923c;
+      --accent-dark: #7c3e0e;
+      --green:       #22c55e;
+      --blue:  #38bdf8;
+      --purple:      #a78bfa;
+      --red:   #f87171;
+      --mono:  'Space Mono', monospace;
+      --sans:  'Barlow', sans-serif;
+      --radius:      10px;
+      --shadow:      0 8px 32px rgba(0,0,0,0.5);
+}
+
+    /* ── RESET & BASE ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+}
+
+    /* Subtle grid texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+  linear-gradient(rgba(249,115,22,0.03) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(249,115,22,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+}
+
+    /* ── HEADER ────────────────────────────────────────────────── */
+    header {
+      position: relative;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13,13,15,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+}
+
+.header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: 1rem;
+}
+
+.logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+}
+
+.logo-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      flex-shrink: 0;
+}
+
+.logo-name {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+}
+
+.logo-name span { color: var(--accent); }
+
+.header-badge {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 20px;
+}
+
+    /* ── HERO ──────────────────────────────────────────────────── */
+.hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 72px clamp(1.5rem, 5vw, 4rem) 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+}
+
+.hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+}
+
+.hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.1rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.2s forwards;
+}
+
+.hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      position: relative;
+}
+
+.hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.3s forwards;
+}
+
+.hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.4s forwards;
+}
+
+.stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+}
+
+.stat-value {
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+}
+
+.stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+}
+
+.stat-divider {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+}
+
+    /* ── FILTER TABS ───────────────────────────────────────────── */
+.filters-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      max-width: 1100px;
+      margin: 0 auto 2.5rem;
+}
+
+.filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+}
+
+.filter-btn {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+}
+
+.filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+      font-weight: 700;
+}
+
+    /* ── MAIN CONTENT ──────────────────────────────────────────── */
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 0 clamp(1.5rem, 5vw, 4rem) 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+}
+
+    /* ── SECTION ───────────────────────────────────────────────── */
+.section {
+      margin-bottom: 3.5rem;
+}
+
+.section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+}
+
+.section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+}
+
+.section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+}
+
+.section-count {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: auto;
+}
+
+.section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+}
+
+    /* ── CARDS GRID ────────────────────────────────────────────── */
+.cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+}
+
+    /* ── DOWNLOAD CARD ─────────────────────────────────────────── */
+.card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      animation: fadeUp 0.5s ease both;
+}
+
+.card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(249,115,22,0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+}
+
+.card:hover {
+      border-color: rgba(249,115,22,0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(249,115,22,0.08), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.card:hover::before { opacity: 1; }
+
+    /* Accent strip at top of card */
+.card-strip {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.1rem;
+}
+
+.card-file-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.06);
+}
+
+.card-info { flex: 1; min-width: 0; }
+
+.card-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+}
+
+.card-version {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+}
+
+.card-badges {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+}
+
+.badge {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+}
+
+.badge-new   { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.25); color: var(--green); }
+.badge-free  { background: rgba(56,189,248,0.12); border-color: rgba(56,189,248,0.25); color: var(--blue); }
+.badge-beta  { background: rgba(167,139,250,0.12); border-color: rgba(167,139,250,0.25); color: var(--purple); }
+.badge-hot   { background: rgba(249,115,22,0.12); border-color: rgba(249,115,22,0.25); color: var(--accent); }
+
+.card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+}
+
+.card-meta {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 1.3rem;
+      flex-wrap: wrap;
+}
+
+.meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+}
+
+.meta-item span:first-child {
+      font-size: 0.75rem;
+}
+
+.meta-item span:last-child {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+}
+
+    /* ── DOWNLOAD BUTTON ───────────────────────────────────────── */
+.download-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 13px 20px;
+      border-radius: 8px;
+      border: none;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      text-decoration: none;
+}
+
+.download-btn-primary {
+      background: var(--accent);
+      color: #000;
+}
+
+.download-btn-primary:hover {
+      background: var(--accent-2);
+      box-shadow: 0 4px 20px rgba(249,115,22,0.35);
+}
+
+.download-btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+}
+
+.download-btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+}
+
+    /* Ripple on click */
+.download-btn::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      transform: scale(0);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+}
+
+.download-btn.ripple::after {
+      transform: scale(60);
+      opacity: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+    /* Progress state */
+.download-btn.downloading {
+      pointer-events: none;
+      opacity: 0.8;
+}
+
+.download-btn .btn-progress {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: rgba(255,255,255,0.12);
+      width: 0%;
+      transition: width 0.05s linear;
+      border-radius: 8px;
+}
+
+.download-btn .btn-label { position: relative; z-index: 1; }
+.download-btn .btn-icon  { position: relative; z-index: 1; font-size: 1rem; }
+
+    /* Success state */
+.download-btn.done {
+      background: rgba(34,197,94,0.15) !important;
+      border: 1px solid rgba(34,197,94,0.3) !important;
+      color: var(--green) !important;
+}
+
+    /* ── EMPTY SECTION ─────────────────────────────────────────── */
+.coming-soon-card {
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      grid-column: 1 / -1;
+}
+
+.coming-soon-card .cs-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+.coming-soon-card p { font-family: var(--mono); }
+
+    /* ── FOOTER ────────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem clamp(1.5rem, 5vw, 4rem);
+      text-align: center;
+}
+
+.footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+}
+
+.footer-inner a { color: var(--text-muted); text-decoration: none; }
+.footer-inner a:hover { color: var(--accent); }
+
+    /* ── TOAST NOTIFICATION ────────────────────────────────────── */
+.toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      pointer-events: none;
+}
+
+.toast {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 0.85rem 1.2rem;
+      font-size: 0.82rem;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transform: translateX(120%);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      min-width: 240px;
+      max-width: 320px;
+}
+
+.toast.show { transform: translateX(0); }
+.toast.success { border-left-color: var(--green); }
+.toast.error   { border-left-color: var(--red); }
+
+    /* ── ANIMATIONS ────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+}
+
+    /* stagger cards */
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.12s; }
+.card:nth-child(3) { animation-delay: 0.19s; }
+.card:nth-child(4) { animation-delay: 0.26s; }
+
+    /* ── RESPONSIVE ────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+.hero-stats { gap: 1.5rem; }
+.stat-divider { display: none; }
+.cards-grid { grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ─────────────────────────────── -->
+  <header>
+    <div class="header-inner">
+      <a class="logo" href="#">
+  <div class="logo-icon">🔥</div>
+  <span class="logo-name">Inferno<span>Prime</span></span>
+      </a>
+      <div class="header-badge">v1.0 · Downloads Hub</div>
+    </div>
+  </header>
+
+  <!-- ── HERO ───────────────────────────────── -->
+  <section class="hero">
+    <p class="hero-eyebrow">// Official Downloads</p>
+    <h1>Everything you need,<br/><em>all in one place.</em></h1>
+    <p>Verified, safe, and always up-to-date. Click to download — your files will start immediately.</p>
+    <div class="hero-stats">
+      <div class="stat">
+  <span class="stat-value" id="stat-total">1</span>
+  <span class="stat-label">Total Files</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+  <span class="stat-value">100%</span>
+  <span class="stat-label">Virus-Free</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+  <span class="stat-value">Free</span>
+  <span class="stat-label">Always</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FILTER TABS ─────────────────────────── -->
+  <div class="filters-wrap">
+    <div class="filters" id="filterBar">
+      <button class="filter-btn active" data-filter="all">All Files</button>
+      <button class="filter-btn" data-filter="apk">📱 Apps</button>
+      <button class="filter-btn" data-filter="video">🎬 Videos</button>
+      <button class="filter-btn" data-filter="audio">🎵 Audio</button>
+      <button class="filter-btn" data-filter="photo">🖼 Photos</button>
+    </div>
+  </div>
+
+  <!-- ── MAIN ───────────────────────────────── -->
+  <main id="mainContent">
+
+    <!-- ═══ SECTION: APPS (APK) ═══ -->
+    <div class="section" data-category="apk">
+      <div class="section-header">
+  <div class="section-icon" style="background:rgba(249,115,22,0.12); border:1px solid rgba(249,115,22,0.2);">📱</div>
+  <span class="section-title">Applications</span>
+  <div class="section-line"></div>
+  <div class="section-count" id="count-apk">0 files</div>
+      </div>
+      <div class="cards-grid" id="grid-apk">
+  <!-- Cards injected by JS -->
+      </div>
+    </div>
+
+    <!-- ═══ SECTION: VIDEOS ═══ -->
+    <div class="section" data-category="video">
+      <div class="section-header">
+  <div class="section-icon" style="background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.2);">🎬</div>
+  <span class="section-title">Videos</span>
+  <div class="section-line"></div>
+  <div class="section-count" id="count-video">0 files</div>
+      </div>
+      <div class="cards-grid" id="grid-video">
+      </div>
+    </div>
+
+    <!-- ═══ SECTION: AUDIO ═══ -->
+    <div class="section" data-category="audio">
+      <div class="section-header">
+  <div class="section-icon" style="background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.2);">🎵</div>
+  <span class="section-title">Audio</span>
+  <div class="section-line"></div>
+  <div class="section-count" id="count-audio">0 files</div>
+      </div>
+      <div class="cards-grid" id="grid-audio">
+      </div>
+    </div>
+
+    <!-- ═══ SECTION: PHOTOS ═══ -->
+    <div class="section" data-category="photo">
+      <div class="section-header">
+  <div class="section-icon" style="background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.2);">🖼</div>
+  <span class="section-title">Photos & Graphics</span>
+  <div class="section-line"></div>
+  <div class="section-count" id="count-photo">0 files</div>
+      </div>
+      <div class="cards-grid" id="grid-photo">
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <p>© 2026 BennyBoy · All files are property of their respective owners.</p>
+      <p style="margin-top:4px;">Need help? <a href="#">Contact Support</a> · <a href="#">Terms of Use</a></p>
+    </div>
+  </footer>
+
+  <!-- ── TOAST CONTAINER ─────────────────────── -->
+  <div class="toast-container" id="toastContainer"></div>
+
+
+  <script>
+    /* ════════════════════════════════════════════════════════════
+       ╔══════════════════════════════════════════════════════╗
+       ║   DATA — EDIT THIS SECTION TO ADD / REMOVE FILES    ║
+       ╚══════════════════════════════════════════════════════╝
+
+       Each file object has:
+   - category  : 'apk' | 'video' | 'audio' | 'photo'
+   - name      : Display name
+   - version   : Version string (optional)
+   - desc      : Short description
+   - size      : Human-readable size
+   - updated   : Date string
+   - path      : Relative or absolute URL to the file on your server
+   - badges    : Array of 'new' | 'free' | 'beta' | 'hot'
+   - primary   : true = orange button, false = outline button
+
+       ══════════════════════════════════════════════════════ */
+
+const FILES = [
+{
+  category : 'apk',
+  name     : 'OPay',
+  version  : 'v1.1.1',
+  desc     : 'Self Made OPay app',
+  size     : '6.34 MB',
+  updated  : '1 Mar 2025',
+  path     : '/BigWiz/Downloads/OPay.apk',
+  badges   : ['new', 'free'],
+  primary  : true,
+},
+
+/* --- EXAMPLES TO UNCOMMENT WHEN READY ---
+
+      {
+  category : 'video',
+  name     : 'Tutorial Series — Ep.1',
+  version  : 'HD 1080p',
+  desc     : 'A full walkthrough of the setup process from scratch. Great for beginners.',
+  size     : '340 MB',
+  updated  : 'Feb 2025',
+  path     : '/downloads/videos/tutorial-ep1.mp4',
+  badges   : ['free'],
+  primary  : true,
+},
+      {
+  category : 'audio',
+  name     : 'Podcast — Season 1',
+  version  : 'MP3 · 128kbps',
+  desc     : 'All eight episodes of our first podcast season bundled in one download.',
+  size     : '220 MB',
+  updated  : 'Jan 2025',
+  path     : '/downloads/audio/podcast-s1-bundle.zip',
+  badges   : ['hot'],
+  primary  : true,
+},
+      {
+  category : 'photo',
+  name     : 'Wallpaper Pack',
+  version  : '4K · 25 images',
+  desc     : 'Exclusive high-resolution wallpapers. Suitable for desktop and mobile screens.',
+  size     : '85 MB',
+  updated  : 'Mar 2025',
+  path     : '/downloads/photos/wallpaper-pack-4k.zip',
+  badges   : ['new', 'free'],
+  primary  : false,
+},
+
+      */
+    ];
+
+    /* ═══ ICONS per category ═══ */
+    const ICONS = {
+      apk   : '📱',
+      video : '🎬',
+      audio : '🎵',
+      photo : '🖼',
+};
+
+    /* ═══ Accent colors per category ═══ */
+    const COLORS = {
+      apk   : '#f97316',
+      video : '#38bdf8',
+      audio : '#a78bfa',
+      photo : '#22c55e',
+};
+
+    /* ═══ RENDER CARDS ═══ */
+    function buildCard(file, idx) {
+      const color = COLORS[file.category] || '#f97316';
+      const icon  = ICONS[file.category]  || '📄';
+
+      const badgesHTML = file.badges.map(b =>
+  `<span class="badge badge-${b}">${b}</span>`
+      ).join('');
+
+      const btnClass = file.primary ? 'download-btn-primary' : 'download-btn-secondary';
+
+      return `
+  <div class="card" data-category="${file.category}">
+    <div class="card-strip" style="background:${color};"></div>
+
+    <div class="card-top">
+      <div class="card-file-icon" style="background:color-mix(in srgb, ${color} 12%, transparent);">
+  ${icon}
+      </div>
+      <div class="card-info">
+  <div class="card-name">${file.name}</div>
+  <div class="card-version">${file.version || ''}</div>
+      </div>
+    </div>
+
+    <div class="card-badges">${badgesHTML}</div>
+
+    <p class="card-desc">${file.desc}</p>
+
+    <div class="card-meta">
+      <div class="meta-item">
+  <span>💾</span>
+  <span>${file.size}</span>
+      </div>
+      <div class="meta-item">
+  <span>🗓</span>
+  <span>${file.updated}</span>
+      </div>
+    </div>
+
+    <button
+      class="download-btn ${btnClass}"
+      onclick="handleDownload(this, '${file.path}', '${file.name}')"
+      data-path="${file.path}"
+    >
+      <div class="btn-progress"></div>
+      <span class="btn-icon">⬇</span>
+      <span class="btn-label">Download · ${file.size}</span>
+    </button>
+  </div>
+      `;
+}
+
+    function renderAll(filter = 'all') {
+      const categories = ['apk', 'video', 'audio', 'photo'];
+      let totalVisible = 0;
+
+      categories.forEach(cat => {
+  const section = document.querySelector(`[data-category="${cat}"]`);
+  const grid    = document.getElementById(`grid-${cat}`);
+  const counter = document.getElementById(`count-${cat}`);
+
+  const filtered = FILES.filter(f => f.category === cat && (filter === 'all' || filter === cat));
+
+  totalVisible += filtered.length;
+  counter.textContent = `${filtered.length} file${filtered.length !== 1 ? 's' : ''}`;
+
+  if (filtered.length === 0) {
+    const isComingSoon = FILES.filter(f => f.category === cat).length === 0;
+    grid.innerHTML = `
+      <div class="coming-soon-card">
+  <span class="cs-icon">${isComingSoon ? '🔒' : '🔍'}</span>
+  <p>${isComingSoon ? 'Nothing here yet — check back soon.' : 'No files match this filter.'}</p>
+      </div>`;
+    // hide sections with 0 matches when filtering
+    section.style.display = (filter === 'all' || filter === cat) ? '' : 'none';
+} else {
+    grid.innerHTML = filtered.map(buildCard).join('');
+    section.style.display = '';
+}
+});
+
+      document.getElementById('stat-total').textContent = FILES.length;
+}
+
+    /* ═══ FILTER TABS ═══ */
+    document.getElementById('filterBar').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAll(btn.dataset.filter);
+});
+
+    /* ═══ DOWNLOAD HANDLER ═══ */
+    function handleDownload(btn, path, name) {
+      // ripple
+      btn.classList.add('ripple');
+      setTimeout(() => btn.classList.remove('ripple'), 500);
+
+      // animate progress bar
+      btn.classList.add('downloading');
+      const bar   = btn.querySelector('.btn-progress');
+      const label = btn.querySelector('.btn-label');
+      const icon  = btn.querySelector('.btn-icon');
+      let pct = 0;
+
+      label.textContent = 'Starting…';
+      icon.textContent  = '⏳';
+
+      const interval = setInterval(() => {
+  pct += Math.random() * 18;
+  if (pct >= 100) pct = 100;
+  bar.style.width = pct + '%';
+  label.textContent = `Downloading… ${Math.round(pct)}%`;
+
+  if (pct === 100) {
+    clearInterval(interval);
+    triggerActualDownload(path, name);
+
+    btn.classList.remove('downloading');
+    btn.classList.add('done');
+    icon.textContent  = '✓';
+    label.textContent = 'Download Started!';
+
+    showToast(`✓ "${name}" download started!`, 'success');
+
+    // reset button after 4 seconds
+    setTimeout(() => {
+      btn.classList.remove('done');
+      bar.style.width = '0%';
+      icon.textContent  = '⬇';
+      // Re-read size from original data
+      const filePath = btn.dataset.path;
+      const match = FILES.find(f => f.path === filePath);
+      label.textContent = match ? `Download · ${match.size}` : 'Download';
+}, 4000);
+}
+}, 80);
+}
+
+    /* Creates a hidden <a> to trigger the browser's native download */
+    function triggerActualDownload(path, filename) {
+      const a = document.createElement('a');
+      a.href     = path;
+      a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+}
+
+    /* ═══ TOAST ═══ */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+  requestAnimationFrame(() => toast.classList.add('show'));
+});
+
+      setTimeout(() => {
+  toast.classList.remove('show');
+  setTimeout(() => toast.remove(), 400);
+}, 3500);
+}
+
+    /* ═══ INIT ═══ */
+    renderAll();
+  </script>
+</body>
+</html>
+```
