@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Style.css">
+  <title>TERA Chat Simulation</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #FFF;
+  background-color: #212121;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+  <div class="top">
+<button class="menu-btn">
+<img src="Images/Menu.svg" id="menu-svg">
+</button>
+<h3 id="tera-top-h">TERA-Uncensored <span id="parameters">15B</span> <span class="rotate">&#8250;</span></h3>
+
+  <div class="select-model-div">
+<!--
+<p id="model1">TERA-Uncensored 8B</p>
+<p id="model2">TERA 8B</p>
+-->
+<h2 id="no-models-h">No other Models Available.</h2>
+  </div>
+
+<button class="reset-btn" id="reset-btn" onclick="resetChat()">
+<img src="Images/Edit.svg" id="edit-svg">
+</button>
+</button>
+  </div>
+<br><br>
+<br>
+
+  <div class="chat-container">
+<div class="messages" id="chatBox"></div>
+<div id="emptyChat" class="empty-chat">
+  <h2 id="what-to-help-with">What can I help with?</h2>
+  <div class="starter-buttons">
+<button class="starter-btn" onclick="setStarterMessage('Write a Python script for...')">🐍Write a Python script for...</button>
+<button class="starter-btn" onclick="setStarterMessage('Anime Gist')">Anime Gist</button>
+<button class="starter-btn" onclick="setStarterMessage('Casual chat 😜😌💡')">Casual chat 😜😌💡</button>
+<button class="starter-btn" onclick="setStarterMessage('️Finance 💸💹')">Finance 💸💹</button>
+  </div>
+  </div>
+  </div>
+
+<!-- We wrote this code when we were high, so... too many divs -->
+  <div class="bottom-divs">
+  <div class="bottom-section">
+  <div class="messageInput-div">
+<textarea id="messageInput" placeholder="Message TERA..."></textarea>
+  </div>
+
+  <div class="add-send-divs">
+  <div class="add-button-div">
+
+<input type="file" id="imageInput" accept="image/*" style="display: none;">
+<button class="add-btn" id="imageUploadBtn">
+  <img src="Images/Add.svg" id="add-svg">
+</button>
+  </div>
+
+  <div class="humor-button-div">
+<button class="humor-btn">
+<img src="Images/Devil.svg" id="humor-svg">
+Humor
+</button>
+  </div>
+
+  <div class="humor-button-div">
+<button class="think-btn">
+<img src="Images/Bulb.svg" id="think-svg">
+Think
+</button>
+  </div>
+
+  <div class="send-button-div">
+<button class="send-btn" onclick="sendMessage()" disabled>
+<img src="Images/Arrow-Up.svg" id="arrow-svg">
+</button>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  <script>
+
+window.addEventListener("DOMContentLoaded", function() {
+localStorage.setItem("BennyAuthn1", "true");
+//localStorage.removeItem("BennyBan01");
+// 28/02/2025
+var Verified = localStorage.getItem("BennyAuthn1");
+if (!Verified) {
+  window.location.href = "https://bulamabenjamin.website";
+  //alert("Not Verified!");
+} else {
+  //alert("Verified!");
+}
+});
+
+
+var selectModel = document.querySelector(".select-model-div");
+var teraTopH = document.getElementById("tera-top-h");
+
+var Clicked = false;
+teraTopH.addEventListener("click", function() {
+if (!Clicked) {
+  selectModel.style.display = "block";
+  teraTopH.style.backgroundColor = "#2F2F2F";
+  Clicked = true;
+} else {
+  selectModel.style.display = "none";
+  teraTopH.style.backgroundColor = "transparent";
+  Clicked = false;
+}
+});
+
+var messageInput = document.getElementById("messageInput");
+var sendButton = document.querySelector(".send-btn");
+messageInput.addEventListener("input", function() {
+if (messageInput.value.trim() !== "") {
+  sendButton.disabled = false;
+} else {
+  sendButton.disabled = true;
+}
+});
+
+var humorButton = document.querySelector(".humor-btn");
+var humorSvg = document.getElementById("humor-svg");
+
+var isClicked = false;
+humorButton.addEventListener("click", function() {
+if (!isClicked) {
+  humorButton.style.border = "1px solid #3C3C3C";
+  humorButton.style.color = "#B4B4B4";
+  humorButton.style.backgroundColor = "transparent";
+  humorSvg.src = "Images/Devil-Light.svg";
+  isClicked = true;
+} else {
+  humorButton.style.border = "none";
+  humorButton.style.color = "#58A5EB";
+  humorButton.style.backgroundColor = "#294A6D";
+  humorSvg.src = "Images/Devil.svg";
+  isClicked = false;
+}
+});
+
+
+var thinkButton = document.querySelector(".think-btn");
+var thinkSvg = document.getElementById("think-svg");
+
+var isClicked2 = false;
+thinkButton.addEventListener("click", function() {
+if (!isClicked2) {
+  thinkButton.style.border = "1px solid #3C3C3C";
+  thinkButton.style.color = "#B4B4B4";
+  thinkButton.style.backgroundColor = "transparent";
+  thinkSvg.src = "Images/Bulb-Light.svg";
+  isClicked2 = true;
+} else {
+  thinkButton.style.border = "none";
+  thinkButton.style.color = "#58A5EB";
+  thinkButton.style.backgroundColor = "#294A6D";
+  thinkSvg.src = "Images/Bulb.svg";
+  isClicked2 = false;
+}
+});
+
+
+document.getElementById("messageInput").addEventListener("focus", function () {
+  let input = this;
+if (input.value.trim() !== "") return; // Don't overwrite if there's already text
+
+  let lastMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : { sender: "TERA" };
+  input.value = lastMessage.sender === "TERA" ? "Benny: " : "TERA: ";
+});
+
+document.getElementById("messageInput").addEventListener("blur", function () {
+  let input = this;
+if (/^(Benny:|TERA:)\s*$/.test(input.value)) {
+  input.value = "";
+  sendButton.disabled = true;
+}
+});
+
+document.getElementById("imageUploadBtn").addEventListener("click", function () {
+document.getElementById("imageInput").click();
+});
+
+document.getElementById("imageInput").addEventListener("change", function (event) {
+  let file = event.target.files[0];
+  if (!file) return;
+
+  let reader = new FileReader();
+reader.onload = function (e) {
+  let imgSrc = e.target.result; // This is the Base64 string
+
+// Create an image element
+  let imgTag = document.createElement("img");
+  imgTag.src = imgSrc;
+  imgTag.classList.add("chat-image");
+
+// Wrap the image in a message div
+  let imgDiv = document.createElement("div");
+  imgDiv.classList.add("message", "benny");
+  imgDiv.appendChild(imgTag);
+
+// Append to chat
+  let chatBox = document.getElementById("chatBox");
+  chatBox.appendChild(imgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+// Save image to chat history
+  chatHistory.push({ sender: "Benny", image: imgSrc });
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+};
+  
+// Show messages section
+  document.getElementById("emptyChat").style.display = "none";
+  document.querySelector(".messages").style.display = "flex";
+
+  reader.readAsDataURL(file);
+});
+
+
+function displayMessages() {
+  let chatBox = document.getElementById("chatBox");
+  let emptyChat = document.getElementById("emptyChat");
+  let Messages = document.querySelector(".messages");
+
+  chatBox.innerHTML = "";
+
+  if (chatHistory.length === 0) {
+    emptyChat.style.display = "block";
+    Messages.style.display = "none";
+  } else {
+    emptyChat.style.display = "none";
+    Messages.style.display = "flex";
+  }
+
+  chatHistory.forEach(({ sender, text, image }) => {
+    addMessage(sender, text, image);
+  });
+}
+
+window.onload = function () {
+  chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  displayMessages();
+};
+
+
+let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+function displayMessages() {
+  let chatBox = document.getElementById("chatBox");
+  let emptyChat = document.getElementById("emptyChat");
+  let Messages = document.querySelector(".messages");
+  chatBox.innerHTML = "";
+  sendButton.disabled = true;
+
+if (chatHistory.length === 0) {
+  emptyChat.style.display = "block";
+  Messages.style.display = "none";
+} else {
+  emptyChat.style.display = "none";
+  Messages.style.display = "flex";
+}
+
+chatHistory.forEach(({ sender, text }) => {
+  let msgDiv = document.createElement("div");
+  msgDiv.classList.add("message", sender === "Benny" ? "benny" : "tera");
+  msgDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+  chatBox.appendChild(msgDiv);
+});
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+ 
+ function sendMessage() {
+  let input = document.getElementById("messageInput");
+  let text = input.value.trim();
+if (!text) return;
+
+  let sender = text.startsWith("TERA:") ? "TERA" : "Benny";
+  //let cleanText = text.replace(/^(Benny:|TERA:)\s?/, "").trim();
+  let cleanText = text.replace(/^(Benny:|TERA:)\s?/, "").trim().replace(/\n/g, "<br>");
+
+//====================
+// AUTO-REPLY FILTER
+//====================
+
+
+// You can // this out to disable the check
+if (sender === "Benny" && !text.startsWith("Benny: Hey Dear")) {
+  chatHistory.push({ sender, text: cleanText });
+  chatHistory.push({ sender: "TERA", text: "<b>The server is busy with other tasks right now. Please try again later.</b>" });
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  input.value = "";
+  displayMessages();
+  return;
+}
+
+
+  chatHistory.push({ sender, text: cleanText }); // ✅ FIXED: No duplicate sender name
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+
+  input.value = "";
+  displayMessages();
+}
+
+function resetChat() {
+  localStorage.removeItem("chatHistory");
+  chatHistory = [];
+  displayMessages();
+}
+
+function setStarterMessage(message) {
+  document.getElementById("messageInput").value = `Benny: ${message}`;
+  sendButton.disabled = false;
+}
+
+window.onload = displayMessages;
+
+
+document.getElementById("menu-svg").addEventListener("click", function() {
+if (chatHistory.length > 0) {
+  let confirmDelete = confirm("Do you want to delete the last message?");
+
+if (confirmDelete) {
+  chatHistory.pop(); // Remove last message from global chatHistory
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory)); // Update localStorage
+  displayMessages(); // Refresh UI
+}
+}
+});
+
+
+/*
+function formatText(text) {
+  return text
+.replace(/\*b\*(.*?)\*b\*///g, "<b>$1</b>")   // Bold
+//.replace(/\*i\*(.*?)\*i\*/g, "<i>$1</i>")   // Italic
+//.replace(/\*bi\*(.*?)\*bi\*/g, "<b><i>$1</i></b>"); // Bold Italic
+//}
+/*
+function sendFormattedMessage() {
+  let input = document.getElementById("messageInput").value;
+  let formattedMessage = formatText(input);
+  document.getElementById("chatBox").innerHTML += `<p>${formattedMessage}</p>`;
+}
+*/
+
+  </script>
+
+</body>
+</html>
