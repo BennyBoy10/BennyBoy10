@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    { "source": "/Files.json", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "/(Downloads|Thumbnails)/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }] }
+  ]
+}
